@@ -50,16 +50,24 @@ def home(request):
     })
 
 #register
+
 def register_user(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-        if form.is_valid():
-                user = form.save()  
-                login(request, user) 
-                messages.success(request, "Registration successful!")
-                return redirect('login') 
+        username = request.POST.get('username')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists. Please choose a different one.")
+        elif form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful!")
+            return redirect('login')
+        else:
+            messages.error(request, "Registration failed. Please correct the errors below.")
     else:
         form = RegisterForm()
+    
     return render(request, 'user/register.html', {'form': form})
 
 #login
