@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock title %}
+
+{% block main-content %}
+<div class="login-page">
+    <div class="login-container">
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <h3>New Here?</h3>
+                <p>Create an account to start planning your events with us!</p>
+                <a href="{% url 'register' %}" class="register-btn">Register</a>
+            </div>
+        </div>
+        
+        <div class="login-form-container">
+            {% if messages %}
+                <div class="alert-messages">
+                    {% for message in messages %}
+                        <p class="alert {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %} 
+            
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Login to your account</p>
+            
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Enter Username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Enter Password" required>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}

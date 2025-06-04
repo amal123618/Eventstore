@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block main-content %}
+<div class="container mt-5">
+    <h3>Hello {{ guest.name }}, please respond to the invitation for {{ guest.event.name }}</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="rsvp_status">RSVP Status:</label>
+        <select name="rsvp_status" class="form-select my-2" required>
+            <option value="Accepted" {% if guest.rsvp_status == "Accepted" %}selected{% endif %}>Accept</option>
+            <option value="Declined" {% if guest.rsvp_status == "Declined" %}selected{% endif %}>Decline</option>
+            <option value="Pending" {% if guest.rsvp_status == "Pending" %}selected{% endif %}>Pending</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Submit RSVP</button>
+    </form>
+</div>
+{% endblock %}

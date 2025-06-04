@@ -1,0 +1,30 @@
+<!-- templates/shop/bundle_detail.html -->
+{% extends 'base.html'%}
+{% load static %}
+
+
+{% block main-content %}
+<h2>{{ bundle.name }}</h2>
+<p>{{ bundle.description }}</p>
+
+<form method="post" action="{% url 'add_bundle_to_cart' bundle.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Add All to Cart</button>
+</form>
+
+<hr>
+
+<div class="product-list">
+    {% for product in products %}
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="150">
+            {% endif %}
+            <h4>{{ product.name }}</h4>
+            <p>₹{{ product.price }}</p>
+            <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-info">View Details</a>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock main-content %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="success-page">
+    <div class="success-container">
+        <img src="{% static 'images/success-check.gif' %}" alt="Success" class="success-icon">
+        <h2>Thank You for Your Order!</h2>
+        <p>Your order has been placed successfully.</p>
+
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Delivery Date:</strong> {{ order.delivery_date|date:"d M Y" }}</p>
+            <p><strong>Total Paid:</strong> ₹{{ order.total_price }}</p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'product_list' %}" class="btn continue-shopping">Continue Shopping</a>
+            <a href="{% url 'user_orders' %}" class="btn view-orders">View My Orders</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.success-page {
+    padding: 60px 20px;
+    text-align: center;
+}
+.success-container {
+    max-width: 500px;
+    margin: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 30px;
+    background: #f9fff9;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.success-icon {
+    width: 250px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+.success-page h2 {
+    color: #28a745;
+    font-size: 28px;
+}
+.order-summary {
+    margin-top: 20px;
+    text-align: left;
+    font-size: 16px;
+}
+.order-summary p {
+    margin: 5px 0;
+}
+.action-buttons {
+    margin-top: 30px;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.continue-shopping {
+    background-color: #007bff;
+    color: white;
+}
+.view-orders {
+    background-color: #6c757d;
+    color: white;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{% block banner-slider %}
+<section class="hero-banner d-flex align-items-center text-white " id="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Left Text Column -->
+        <div class="col-md-6 text-start  ">
+          <h1 class="display-4 fw-bold">Plan Your Perfect Events</h1>
+          <p class="lead">Everything you need for your dream event, in one place.</p>
+        {% if event%}
+            <a href="{% url 'event_dashboard' event.id %}" class="btn btn-primary btn-lg mt-3">Start Planning</a>
+        {% else %}
+            <a href="{% url 'create_event' %}" class="btn btn-primary btn-lg mt-3">Create an Event</a>
+        {% endif %}
+        </div>
+  
+        <!-- Right Image Column -->
+        <div class="col-md-6 text-center">
+          <img src="{% static 'images/3457.jpg' %}" alt="Wedding Planning" class="img-fluid rounded shadow">
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock banner-slider %}
+{% block event_countdown %}
+    {% if upcoming_event %}
+        <div class="event-countdown">
+            <h2>Countdown to {{ upcoming_event.name }}</h2>
+            <p>
+                
+                <strong>{{ days_left }} Days</strong>
+                <strong>{{ hours_left }} Hours</strong>
+                <strong>{{ minutes_left }} Minutes</strong>
+                <strong>{{ seconds_left }} Seconds</strong>
+            </p>
+        </div>
+    {% else %}
+        <p>No upcoming events at the moment.</p>
+    {% endif %}
+{% endblock %}
+
+
+{% block category-content%}
+<section class="page-section  py-5" id="event-categories">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading text-uppercase">Event Categories</h2>
+            <h3 class="section-subheading text-muted">Explore a variety of event themes for your special day.</h3>
+        </div>
+
+        
+        <div class="row text-center">
+
+    
+            <!-- Event Category 1 -->
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card border-0 shadow-lg">
+                    <a href="{% url 'category' 'Wedding' %}">
+                        <img class="card-img-top rounded" src="static/images/wedding.jpg" alt="Wedding Event">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Weddings</h5>
+                        <p class="card-text text-muted">Elegant & Memorable</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event Category 2 -->
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card border-0 shadow-lg">
+                    <a href="{% url 'category' 'Birthday' %}">
+                        <img class="card-img-top rounded" src="static/images/birthday.jpg" alt="Birthday Event">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Birthdays</h5>
+                        <p class="card-text text-muted">Fun & Colorful</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event Category 3 -->
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card border-0 shadow-lg">
+                    <a href="{% url 'category' 'Baby Shower' %}">
+                        <img class="card-img-top rounded" src="static/images/baby_shower.jpg" alt="Baby Shower Event">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Baby Showers</h5>
+                        <p class="card-text text-muted">Cute & Delightful</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event Category 4 -->
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card border-0 shadow-lg">
+                    <a href="{% url 'category' 'Halloween' %}">
+                        <img class="card-img-top rounded" src="static/images/hallow.jpg" alt="Halloween Event" style="height: 240px; object-fit: cover;">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Halloween</h5>
+                        <p class="card-text text-muted">Spooky & Fun</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event Category 5 -->
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card border-0 shadow-lg">
+                    <a href="{% url 'category' 'Corporate' %}">
+                        <img class="card-img-top rounded" src="static/images/corporate.jpg" alt="Corporate Event">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Corporate</h5>
+                        <p class="card-text text-muted">Joyful & Festive</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event Category 6 -->
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card border-0 shadow-lg">
+                    <a href="{% url 'category' 'Graduation' %}">
+                        <img class="card-img-top rounded" src="static/images/graduation.jpg" alt="Graduation Event">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">Graduation</h5>
+                        <p class="card-text text-muted">Elegant & Timeless</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock category-content%}
+
+
+{% block trending-content %}
+
+<div class="container mt-5 mb-5">
+    <h2 class="section-title text-center mb-4">Trending Products</h2>
+
+    {% if product_groups %}
+    <div id="trendingProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for group in product_groups %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row">
+                        {% for product in group %}
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm border-0 rounded-4 ">
+                                <div class="trending-image  justify-content-center align-items-center p-3" style="height: 220px;">
+                                    {% if product.image %}
+                                        <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}"">
+                                    {% else %}
+                                        <img src="{% static 'images/placeholder.jpg' %}" class="img-fluid" alt="No Image" style="height: 180px; object-fit: contain;">
+                                    {% endif %}
+                                    
+                                    {% if product.badge %}
+                                        <span class="badge bg-danger position-absolute top-0 end-0 m-2">{{ product.badge }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text fw-bold text-success">${{ product.price }}</p>
+                                    <button class="btn btn-outline-primary btn-sm mt-2" ><a href="{% url 'product_detail'  product.id %}" class="text-decoration-none ">View more</a></button>
+                                       
+                                </div>
+                            </div>
+                        </div>
+                        
+                           
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Carousel controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#trendingProductsCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#trendingProductsCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    {% else %}
+        <p class="text-center">No trending products available at the moment.</p>
+    {% endif %}
+</div>
+
+
+
+{% endblock trending-content %}
+
+
+
+{% block bundle-content %}
+    <div class="container mt-5 mb-5">
+        <h2 class="section-title">Curated Bundles</h2>
+        
+        <div class="row">
+            {% for bundle in bundles %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="bundle-card">
+                        <div class="bundle-image">
+                            <img src="{{ bundle.image.url }}" alt="{{ bundle.name }}">
+                        </div>
+                        <div class="bundle-details">
+                            <h5 class="bundle-title">{{ bundle.name }}</h5>
+                            <p class="bundle-theme">Theme: {{ bundle.theme }}</p>
+                            <p class="bundle-description">{{ bundle.description|truncatewords:15 }}</p>
+                            <a href="{% url 'bundle_view' bundle.id %}" class="btn btn-primary">View Products</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock bundle-content %}
+
+
+
+{%block About%}
+<div class="container mt-5">
+    <h2 class="text-center">About Event Store</h2>
+    <p class="text-center text-muted">Your one-stop shop for all event essentials</p>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <img src="{% static 'images/1.jpg' %}" class="img-fluid rounded" alt="About Event Store">
+        </div>
+        <div class="col-md-6">
+            <h3>Who We Are</h3>
+            <p>
+                Event Store is an online platform dedicated to providing high-quality event essentials 
+                for all types of occasions. Whether you're planning a wedding, birthday party, 
+                corporate event, or a baby shower, we've got you covered!
+            </p>
+            <h3>Our Mission</h3>
+            <p>
+                Our mission is to simplify event planning by offering carefully curated 
+                event packages, customizable bundles, and top-tier decorations—all in one place.
+            </p>
+            <h3>Why Choose Us?</h3>
+            <ul>
+                <li>Wide range of products tailored for every event</li>
+                <li>High-quality decorations, gifts, and accessories</li>
+                <li>Easy online ordering & secure payment options</li>
+                <li>Customizable event bundles for a stress-free experience</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+{%endblock About%}
+
+
+<script>
+    document.querySelectorAll('.view-bundle').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const bundleId = this.dataset.bundleId;
+        window.location.href = `/bundles/${bundleId}/`;  // adjust if your URL differs
+      });
+    });
+  </script>

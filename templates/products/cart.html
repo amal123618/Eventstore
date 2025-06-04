@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="container cart-page py-5">
+    <div class="mb-4">
+        <h2 class="fw-bold">My Cart ({{ cart.total_items }} items)</h2>
+    </div>
+
+    {% if cart.cartitem_set.all %}
+    <div class="row">
+
+        <!-- Cart Items -->
+        <div class="col-lg-8">
+            {% for item in cart.cartitem_set.all %}
+            <div class="card mb-4 shadow-sm">
+                <div class="row g-0 align-items-center p-3">
+                    <!-- Product Image -->
+                    <div class="col-md-3 text-center">
+                        <img src="{{ item.product.image.url }}" onerror="this.src='{% static 'images/default-product.png' %}'"
+                             class="img-fluid rounded cart-image" alt="{{ item.product.name }}">
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="col-md-6 p-3">
+                        <h5 class="fw-semibold mb-1">{{ item.product.name }}</h5>
+                        <p class="text-muted mb-0">Seller: YourStore</p>
+                        <div class="price-container my-2 ">
+                            <span class="fw-bold text-success me-2">₹{{ item.product.price }}</span>
+                            {% comment %} <span class="text-muted text-decoration-line-through me-2">₹{{ item.product.original_price|default:item.product.price }}</span>
+                            <span class="text-danger">{{ item.product.discount_percentage|default:"10" }}% off</span> {% endcomment %}
+                        </div>
+                        <p class="mb-0 text-muted">
+                            <i class="fas fa-truck me-1"></i>Delivery by {{ delivery_date|date:"d M Y" }} | Free
+                        </p>
+
+                        <!-- Quantity Controls -->
+                        <form method="post" action="{% url 'update_cart' item.id %}" class="d-flex align-items-center mt-3">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateQuantity(this, -1)">−</button>
+                            <input type="number" name="quantity" class="form-control mx-2 text-center" value="{{ item.quantity }}" min="1" readonly style="width: 60px;">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateQuantity(this, 1)">+</button>
+                            <button type="submit" class="btn btn-link p-0 ms-3 text-primary update-btn d-none">Update</button>
+                        </form>
+
+                        <!-- Action Links -->
+                        <div class="mt-2">
+                            <a href="{% url 'remove_from_cart' item.id %}" class="text-danger me-3">REMOVE</a>
+                            <a href="#" class="text-secondary">SAVE FOR LATER</a>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="col-md-3 text-end">
+                        <span class="fw-bold fs-5">₹{{ item.total_price }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="col-lg-4">
+            <div class="card p-4 shadow-sm">
+                <h5 class="fw-bold mb-3">PRICE DETAILS ({{ cart.total_items }} items)</h5>
+                <div class="d-flex justify-content-between">
+                    <span>Total MRP</span><span>₹{{ cart.total_mrp }}</span>
+                </div>
+                {% comment %} <div class="d-flex justify-content-between text-success">
+                    <span>Discount</span><span>−₹{{ cart.total_discount }}</span>
+                </div> {% endcomment %}
+                <div class="d-flex justify-content-between">
+                    <span>Delivery Charges</span><span class="text-success">FREE</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total Amount</span><span>₹{{ cart.total_price }}</span>
+                </div>
+                <div class="text-success mt-2 small">
+                    You will save ₹{{ cart.total_discount }} on this order.
+                </div>
+
+                <a href="{% url 'checkout' %}" class="btn btn-primary btn-block mt-4 w-100">PLACE ORDER</a>
+                <div class="mt-3 text-muted small d-flex align-items-center">
+                    <i class="fas fa-lock me-2"></i> Safe and Secure Payments
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% else %}
+    <!-- Empty Cart -->
+    <div class="text-center mt-5">
+        <img src="{% static 'images/empty-cart.png' %}" alt="Empty Cart" class="mb-4" style="max-width: 300px;">
+        <h4>Your cart is empty</h4>
+        <p>Add items to it now</p>
+        <a href="{% url 'product_list' %}" class="btn btn-primary">Shop Now</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Quantity Control Script -->
+<script>
+    function updateQuantity(button, change) {
+        const form = button.closest('form');
+        const input = form.querySelector('.quantity-input') || form.querySelector('input[name="quantity"]');
+        let quantity = parseInt(input.value) || 1;
+        quantity += change;
+        if (quantity < 1) quantity = 1;
+        input.value = quantity;
+
+        clearTimeout(window.updateTimeout);
+        window.updateTimeout = setTimeout(() => {
+            form.querySelector('.update-btn').click();
+        }, 800);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main-content %}
+<div class="order-details-page">
+    <div class="order-details-container">
+        <h2>Order ID: {{ order.id }}</h2>
+        <p><strong>Order Date:</strong> {{ order.created_at|date:"d M Y" }}</p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+        <p><strong>Total:</strong> ₹{{ order.total_price }}</p>
+        
+        <div class="order-items">
+            <h3>Ordered Items:</h3>
+            <ul>
+                {% for item in order.items.all %}
+                    <li>
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="50">
+                        <span>{{ item.product.name }}</span>
+                        <span>Qty: {{ item.quantity }}</span>
+                        <span>₹{{ item.total_price }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="order-actions">
+            <a href="{% url 'user_orders' %}" class="btn back-to-orders">Back to Orders</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.order-details-page {
+    padding: 40px 20px;
+    background: #f9f9f9;
+}
+.order-details-container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.order-items ul {
+    list-style-type: none;
+    padding: 0;
+}
+.order-items li {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+.order-items img {
+    margin-right: 15px;
+}
+.order-actions .back-to-orders {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>
+{% endblock %}

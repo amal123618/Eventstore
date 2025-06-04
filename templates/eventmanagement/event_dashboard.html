@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main-content %}
+
+<div class="container mt-5">
+    <h3 class="mb-4">{{ event.name }} - Guest List</h3>
+
+    {% if guests %}
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>RSVP Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for guest in guests %}
+            <tr>
+                <td>{{ guest.name }}</td>
+                <td>{{ guest.email }}</td>
+                <td>{{ guest.rsvp_status }}</td>
+                <td>
+                    <form method="POST" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="hidden" name="guest_id" value="{{ guest.id }}">
+                        <select name="rsvp_status" class="form-select me-2">
+                            <option value="Pending" {% if guest.rsvp_status == "Pending" %}selected{% endif %}>Pending</option>
+                            <option value="Accepted" {% if guest.rsvp_status == "Accepted" %}selected{% endif %}>Accepted</option>
+                            <option value="Declined" {% if guest.rsvp_status == "Declined" %}selected{% endif %}>Declined</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No guests added yet.</p>
+    {% endif %}
+
+    <a href="{% url 'add_guest' event.id %}" class="btn btn-success mt-3">Add Guest</a>
+</div>
+
+{% endblock main-content %}

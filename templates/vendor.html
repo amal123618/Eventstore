@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block main-content %}
+
+<h2>Vendor Dashboard</h2>
+
+<h3>Sales Summary</h3>
+<p>Total Sales: {{ sales_summary.total_sales }}</p>
+<p>Total Items Sold: {{ sales_summary.items_sold }}</p>
+
+<h3>Your Products</h3>
+<a href="{% url 'create_product' %}">Add Product</a>
+<ul>
+  {% for product in products %}
+    <li>
+      {{ product.name }} - ₹{{ product.price }}
+      {% comment %} <a href="{% url 'edit_product' product.pk %}">Edit</a>
+      <a href="{% url 'delete_product' product.pk %}">Delete</a> {% endcomment %}
+    </li>
+  {% empty %}
+    <li>No products listed yet.</li>
+  {% endfor %}
+</ul>
+
+<h3>Recent Orders</h3>
+<ul>
+  {% for order in orders %}
+    <li>{{ order.order.customer }} bought {{ order.product.name }} (Qty: {{ order.quantity }})</li>
+  {% empty %}
+    <li>No recent orders.</li>
+  {% endfor %}
+</ul>
+
+{% endblock main-content %}
