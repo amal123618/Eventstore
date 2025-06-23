@@ -24,10 +24,9 @@ mysql-connector-python==9.0.0
 mysqlclient==2.2.7
 newsapi-python==0.2.7
 newsdataio==0.0.9
-numpy==2.3.1
-pandas==2.2.2
-openpyxl==3.1.5
-
+numpy==1.26.4 --only-binary=numpy
+openpyxl==3.1.2 --only-binary=openpyxl
+pandas==2.2.2 --only-binary=pandas
 paypalrestsdk==1.13.3
 pillow==11.1.0
 platformdirs==4.3.6
