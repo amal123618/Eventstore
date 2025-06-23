@@ -48,3 +48,5 @@ setuptools==70.0.0
 
 # Dependency resolution
 pip-tools==7.3.0  # For managing requirements
+
+gunicorn==21.2.0
