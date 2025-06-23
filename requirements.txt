@@ -21,9 +21,9 @@ newsapi-python==0.2.7
 newsdataio==0.0.9
 
 # Data Processing (updated for Python 3.13 compatibility)
-numpy==2.0.0  # First official Python 3.13 compatible release
-pandas==2.2.2 --only-binary=pandas  # Force wheel installation
-openpyxl==3.1.2
+numpy==2.3.1
+pandas==2.3.0
+openpyxl==3.1.5
 
 # Frontend/Assets
 whitenoise==6.9.0
