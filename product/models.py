@@ -107,6 +107,9 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20,choices=STATUS_CHOICES)  # e.g., Pending, Shipped, Delivered
     updated_at = models.DateTimeField(auto_now=True)
+    delivery_date = models.DateField(null=True, blank=True)
+    is_paid = models.BooleanField(default=False)
+    paid_at = models.DateTimeField(null=True, blank=True)
 
 class ShippingAddress(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)

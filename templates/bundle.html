@@ -7,11 +7,17 @@
 <h2>{{ bundle.name }}</h2>
 <p>{{ bundle.description }}</p>
 
+{% if bundle and bundle.id %}
+<p>Bundle ID debug: {{ bundle.id }}</p>
+
 <form method="post" action="{% url 'add_bundle_to_cart' bundle.id %}">
     {% csrf_token %}
-    <button type="submit" class="btn btn-success">Add All to Cart</button>
+    <button type="submit" class="btn btn-success">Add Bundle to Cart</button>
 </form>
 
+{% else %}
+<p class="text-danger">Bundle information is unavailable.</p>
+{% endif %}
 <hr>
 
 <div class="product-list">

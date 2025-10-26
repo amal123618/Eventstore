@@ -68,14 +68,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'eventmanagement.context_processors.user_event',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'store.wsgi.application'
-
 AUTH_USER_MODEL = 'user.User'
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -86,6 +87,7 @@ DATABASES = {
     }
 }
 
+ALLOWED_HOSTS = ['amaljith0003.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -143,3 +145,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'your-email@gmail.com'
 EMAIL_HOST_PASSWORD = 'your-app-password'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Use console backend locally for testing password reset emails
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

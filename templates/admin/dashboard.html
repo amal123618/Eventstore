@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Admin Dashboard{% endblock title %}
+{% block main-content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Admin Dashboard</h2>
+    <div class="btn-group">
+      <a href="{% url 'admin_users' %}" class="btn btn-outline-secondary btn-sm">Manage Users</a>
+      <a href="{% url 'admin_events' %}" class="btn btn-outline-secondary btn-sm">Manage Events</a>
+      <a href="{% url 'admin_guests' %}" class="btn btn-outline-secondary btn-sm">Manage Guests</a>
+      <a href="{% url 'admin_orders' %}" class="btn btn-outline-secondary btn-sm">Manage Orders</a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="card text-bg-primary">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-semibold">Users</div>
+              <div class="fs-4">{{ total_users }}</div>
+            </div>
+            <i class="bi bi-people fs-1"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-bg-success">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-semibold">Products</div>
+              <div class="fs-4">{{ total_products }}</div>
+            </div>
+            <i class="bi bi-box-seam fs-1"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-bg-warning">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-semibold">Orders</div>
+              <div class="fs-4">{{ total_orders }}</div>
+            </div>
+            <i class="bi bi-receipt fs-1"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-bg-info">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-semibold">Events</div>
+              <div class="fs-4">{{ total_events }}</div>
+            </div>
+            <i class="bi bi-calendar-event fs-1"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Recent Orders</span>
+          <span class="badge text-bg-secondary">Revenue: {{ revenue_total }}</span>
+        </div>
+        <div class="card-body p-0">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Total</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in recent_orders %}
+              <tr>
+                <td>{{ o.id }}</td>
+                <td>{{ o.user }}</td>
+                <td>{{ o.total_price }}</td>
+                <td>{{ o.created_at }}</td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="4" class="text-center">No orders</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">Recent Events</div>
+        <div class="card-body p-0">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>User</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for e in recent_events %}
+              <tr>
+                <td>{{ e.id }}</td>
+                <td>{{ e.name }}</td>
+                <td>{{ e.event_date }}</td>
+                <td>{{ e.user }}</td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="4" class="text-center">No events</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main-content %}

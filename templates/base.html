@@ -34,17 +34,27 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-3">
+                   {% if request.path == '/' %}
                     <li class="nav-item">
                         <a class="nav-link" href="#event-categories">Categories</a>
                     </li>
+                    {% endif %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'product_list'%}">Products</a>
                     </li>
+                    {% if user.is_authenticated and user.is_staff %}
                     <li class="nav-item">
-                        {% if event %}
-                            <a class="nav-link" href="{% url 'event_dashboard' event.id %}">event</a>
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}">Admin</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        {% if current_event %}
+                            <a class="nav-link" href="{% url 'event_dashboard' current_event.id %}">My Event</a>
                         {% else %}
-                             <p>Event not found.</p>
+                            {% if user.is_authenticated %}
+                                <a class="nav-link" href="{% url 'create_event' %}">Create Event</a>
+                            {% endif %}
                         {% endif %}
 
                         

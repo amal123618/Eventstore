@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock title %}
+{% block main-content %}
+<div class="container py-5" style="max-width:520px;">
+  <h3 class="mb-3">Payment</h3>
+  <div class="card">
+    <div class="card-body">
+      <p class="mb-1"><strong>Order ID:</strong> {{ order.id }}</p>
+      <p class="mb-1"><strong>Total Amount:</strong> ₹{{ order.total_price }}</p>
+      <p class="text-muted">This is a dummy payment page. Click the button to simulate a successful payment.</p>
+      <form method="post" action="{% url 'payment_process' order.id %}">
+        {% csrf_token %}
+        <button class="btn btn-primary w-100" type="submit">Pay Now (Dummy)</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main-content %}

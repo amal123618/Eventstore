@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.db import models
@@ -16,6 +16,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from eventmanagement.models import Event
 from django.core.paginator import Paginator
 
 User = get_user_model()
@@ -102,7 +103,7 @@ def product_list(request):
     }
     return render(request, 'products/product_list.html', context)
 
-@login_required
+@login_required(login_url='login')   
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     reviews = Review.objects.filter(product=product).order_by('-created_at')
@@ -150,7 +151,7 @@ def remove_from_wishlist(request, item_id):
     messages.success(request, "Item removed from your wishlist.")
     return redirect('wishlist_view')
 
-
+ 
 def product_update(request,product_id):
     product=Product.objects.get(id=product_id)
     categories=Category.objects.all()
@@ -170,17 +171,14 @@ def product_delete(request,product_id):
 
 
 
-
+@login_required(login_url='login')   
 def cart_view(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     return render(request, 'products/cart.html', {'cart': cart})
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='login')   
 def add_to_cart(request, product_id):
-    
-    if not request.user.is_authenticated:
-        messages.error(request, "Please log in to add items to your cart.")
-        return redirect('login')  
-
     product = get_object_or_404(Product, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
 
@@ -196,7 +194,7 @@ def add_to_cart(request, product_id):
 
     messages.success(request, f"{product.name} added to your cart!")
     return redirect('cart_view')
-
+@login_required(login_url='login')   
 def update_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     quantity = request.POST.get('quantity', 1)
@@ -210,7 +208,7 @@ def update_cart(request, item_id):
         pass
     
     return redirect('cart_view')
-
+@login_required(login_url='login')   
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     cart_item.delete()
@@ -220,10 +218,10 @@ def remove_from_cart(request, item_id):
 
 
 
-
+@login_required(login_url='login')   
 def checkout_view(request):
     cart = Cart.objects.get(user=request.user)
-    order = Order.objects.create(user=request.user, total_price=cart.total_price)
+    order = Order.objects.create(user=request.user, total_price=cart.total_price, status='Pending')
     
     if request.method == 'POST':
         form = ShippingAddressForm(request.POST)
@@ -239,11 +237,20 @@ def checkout_view(request):
                     quantity=item.quantity,
                     price=item.product.price
                 )
-            cart.cartitem_set.all().delete()  # Clear cart
-            order.is_paid = True  # Set to True only after payment in real-world
-            order.paid_at = datetime.now(timezone.utc)
+            # Determine delivery date based on the user's next upcoming event date
+            user_next_event = (
+                Event.objects.filter(user=request.user, event_date__gte=datetime.now(timezone.utc))
+                .order_by('event_date')
+                .first()
+            )
+            if user_next_event:
+                order.delivery_date = user_next_event.event_date.date()
+            else:
+                order.delivery_date = datetime.now(timezone.utc).date() + timedelta(days=7)
             order.save()
-            return redirect('order_success', order_id=order.id)
+
+            # Redirect to dummy payment page instead of instantly marking as paid
+            return redirect('payment', order_id=order.id)
     else:
         form = ShippingAddressForm()
 
@@ -252,6 +259,24 @@ def checkout_view(request):
 def order_success_view(request, order_id):
     order = Order.objects.get(id=order_id, user=request.user)
     return render(request, 'products/success.html', {'order': order})
+
+def payment_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    # simple dummy payment page
+    return render(request, 'products/payment.html', {'order': order})
+
+def payment_process(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if request.method == 'POST':
+        # Simulate successful payment
+        order.is_paid = True
+        order.paid_at = datetime.now(timezone.utc)
+        order.status = 'Pending'
+        order.save()
+        # Clear cart only after payment succeeds
+        CartItem.objects.filter(cart__user=request.user).delete()
+        return redirect('order_success', order_id=order.id)
+    return redirect('payment', order_id=order.id)
 
 def order_details(request, order_id):
     if not request.user.is_authenticated:
@@ -267,7 +292,14 @@ def user_orders(request):
     if not request.user.is_authenticated:
         messages.error(request, "Please log in to view your orders.")
         return redirect('login')
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    # views.py
+    orders = (
+        Order.objects.filter(user=request.user)
+        .prefetch_related('items__product')
+        .exclude(items__isnull=True)  # ensures orders have products
+        .order_by('-created_at')
+)
+
     
     return render(request, 'products/user_orders.html', {
         'orders': orders
@@ -279,6 +311,7 @@ def user_orders(request):
 #     print(bundles) 
 #     return render(request, 'index.html', {'bundles': bundles})
     
-    
+
+
     
     

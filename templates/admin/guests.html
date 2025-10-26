@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Manage Guests{% endblock title %}
+{% block main-content %}
+<div class="container py-4">
+  <h3 class="mb-3">Guests</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Event</th>
+        <th>Host</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in guests %}
+      <tr>
+        <td>{{ g.id }}</td>
+        <td>{{ g.name }}</td>
+        <td>{{ g.email }}</td>
+        <td>{{ g.event.name }}</td>
+        <td>{{ g.event.user }}</td>
+        <td>
+          <a href="{% url 'admin_guest_delete' g.id %}" class="btn btn-sm btn-outline-danger"
+             onclick="return confirm('Delete this guest?');">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="text-center">No guests found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock main-content %}
