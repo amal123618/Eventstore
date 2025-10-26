@@ -87,7 +87,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ['amaljith0003.pythonanywhere.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['amaljith0003.pythonanywhere.com', 'eventshop.onrender.com', 'eventstore-1.onrender.com', '127.0.0.1', 'localhost']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -137,6 +137,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# CSRF trusted origins for deployment (Render, etc.)
+CSRF_TRUSTED_ORIGINS = [
+    'https://eventshop.onrender.com',
+    'https://eventstore-1.onrender.com',
+    'https://amaljith0003.pythonanywhere.com',
+]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Or your provider

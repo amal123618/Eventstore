@@ -1,0 +1,1 @@
+﻿chore: ignore db.sqlite3 and Python cache files
