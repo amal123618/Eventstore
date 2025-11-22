@@ -2,9 +2,10 @@
 {% load static %}
 
 {% block main-content %}
-<div class="container cart-page py-5">
-    <div class="mb-4">
-        <h2 class="fw-bold">My Cart ({{ cart.total_items }} items)</h2>
+<div class="container cart-page py-4 bg-light">
+    <div class="mb-3">
+        <h2 class="fw-bold mb-1">My Cart ({{ cart.total_items }} items)</h2>
+        <p class="text-muted mb-0" style="font-size: 0.9rem;">From saved addresses and secure payment options</p>
     </div>
 
     {% if cart.cartitem_set.all %}
@@ -13,7 +14,7 @@
         <!-- Cart Items -->
         <div class="col-lg-8">
             {% for item in cart.cartitem_set.all %}
-            <div class="card mb-4 shadow-sm">
+            <div class="card mb-3 shadow-sm border-0">
                 <div class="row g-0 align-items-center p-3">
                     <!-- Product Image -->
                     <div class="col-md-3 text-center">
@@ -59,9 +60,9 @@
             {% endfor %}
         </div>
 
-        <!-- Cart Summary -->
+        <!-- Cart Summary (sticky like Flipkart) -->
         <div class="col-lg-4">
-            <div class="card p-4 shadow-sm">
+            <div class="card p-4 shadow-sm border-0 position-sticky" style="top: 90px;">
                 <h5 class="fw-bold mb-3">PRICE DETAILS ({{ cart.total_items }} items)</h5>
                 <div class="d-flex justify-content-between">
                     <span>Total MRP</span><span>₹{{ cart.total_mrp }}</span>

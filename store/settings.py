@@ -142,6 +142,13 @@ CSRF_TRUSTED_ORIGINS = [
     'https://eventshop.onrender.com',
     'https://eventstore-1.onrender.com',
     'https://amaljith0003.pythonanywhere.com',
+    # Local development / IDE preview origins
+    'http://127.0.0.1',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:50217',
+    'http://localhost',
+    'http://localhost:8000',
+    'http://localhost:50217',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

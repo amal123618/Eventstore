@@ -3,46 +3,67 @@
 
 {% block main-content %}
 <div class="container mt-5 mb-5">
-    <div class="row">
-        <!-- Product Image -->
-        <div class="col-md-6 text-center">
-            <div class="border p-3 bg-white shadow rounded">
+    <div class="row g-4">
+        <!-- Left: Product Image (Flipkart-style large image block) -->
+        <div class="col-md-5">
+            <div class="bg-white border rounded shadow-sm d-flex align-items-center justify-content-center p-4" style="min-height: 380px;">
                 {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 350px; object-fit: contain;">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 360px; object-fit: contain;">
                 {% else %}
                     <img src="{% static 'images/placeholder.jpg' %}" alt="No Image" class="img-fluid">
                 {% endif %}
             </div>
         </div>
 
-        <!-- Product Info -->
-        <div class="col-md-6">
-            <div class="border p-4 bg-white shadow rounded">
-                <h2>{{ product.name }}</h2>
-                <h4 class="text-success mt-2 mb-3">₹ {{ product.price }}</h4>
+        <!-- Right: Product Details (Flipkart-style panel) -->
+        <div class="col-md-7">
+            <div class="bg-white border rounded shadow-sm p-4 h-100 d-flex flex-column">
+                <!-- Title -->
+                <h3 class="mb-2">{{ product.name }}</h3>
 
-                <div class="mb-3">
-                    <strong>Rating:</strong>
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= product.rating %}
-                            <i class="fas fa-star text-warning"></i>
-                        {% elif product.rating|floatformat:1 == forloop.counter|add:"-0.5"|floatformat:1 %}
-                            <i class="fas fa-star-half-alt text-warning"></i>
-                        {% else %}
-                            <i class="far fa-star text-muted"></i>
-                        {% endif %}
-                    {% endfor %}
-                    <span class="text-muted">({{ product.rating }} )</span>
+                <!-- Rating badge and reviews -->
+                <div class="d-flex align-items-center mb-2" style="font-size: 0.9rem;">
+                    <span class="bg-success text-white px-2 py-1 rounded-2 me-2 d-inline-flex align-items-center">
+                        <span class="me-1">{{ product.rating }}</span>
+                        <i class="fas fa-star"></i>
+                    </span>
+                    <span class="text-muted">Ratings &amp; Reviews</span>
                 </div>
 
-                <p>{{ product.description }}</p>
+                <!-- Price block -->
+                <div class="mb-3">
+                    <h2 class="mb-0">₹ {{ product.price }}</h2>
+                    <p class="text-success mb-0" style="font-size: 0.9rem;">Special price</p>
+                </div>
 
-                <form method="post" action="{% url 'add_to_cart' product.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary w-100 mt-3">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
-                </form>
+                <!-- Product description / highlights -->
+                <div class="mb-3" style="font-size: 0.95rem;">
+                    <p class="mb-1 fw-semibold">Product Description</p>
+                    <p class="mb-0 text-muted">{{ product.description }}</p>
+                </div>
+
+                <!-- Offers section (static-style like Flipkart, using existing data only) -->
+                <div class="mb-3" style="font-size: 0.9rem;">
+                    <p class="fw-semibold mb-1 text-success">Available offers</p>
+                    <ul class="list-unstyled mb-0 text-muted">
+                        <li class="mb-1"><i class="fas fa-tag text-success me-2"></i> Bank Offer: 10% off on select cards (example)</li>
+                        <li class="mb-1"><i class="fas fa-tag text-success me-2"></i> Special Price: Get extra discount on this product</li>
+                        <li><i class="fas fa-tag text-success me-2"></i> No-cost EMI available on select options</li>
+                    </ul>
+                </div>
+
+                <!-- Action buttons (Add to Cart) -->
+                <div class="mt-auto">
+                    <div class="d-flex flex-wrap gap-2">
+                        <form method="post" action="{% url 'add_to_cart' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning text-dark fw-semibold px-4 py-2 d-flex align-items-center">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                ADD TO CART
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
