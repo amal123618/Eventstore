@@ -4,8 +4,11 @@ djangorestframework==3.15.2
 djangorestframework-simplejwt==5.5.0
 asgiref==3.8.1
 
+# Environment variable management
+python-decouple==3.8
+
 # Database
-mysqlclient==2.2.7  # Prefer over mysql-connector for better Django integration
+mysqlclient==2.2.7  # Used on PythonAnywhere (MySQL)
 psycopg2-binary==2.9.9  # Optional PostgreSQL support
 
 # Security
@@ -20,9 +23,9 @@ stripe==11.6.0
 newsapi-python==0.2.7
 newsdataio==0.0.9
 
-# Data Processing (updated for Python 3.13 compatibility)
+# Data Processing
 numpy==2.0.0
-pandas==2.2.3  # Updated version
+pandas==2.2.3
 openpyxl==3.1.2
 
 # Frontend/Assets
@@ -42,13 +45,12 @@ rich==13.9.4
 django-debug-toolbar==4.2.0
 ipython==8.25.0
 
-# Cython-related (if building from source needed)
-cython==3.0.10  # Required for Python 3.13 compatibility
+# Build tools
+cython==3.0.10
 setuptools==70.0.0
 
 # Dependency resolution
-pip-tools==7.3.0  # For managing requirements
+pip-tools==7.3.0
 
+# Production server
 gunicorn==21.2.0
-whitenoise==6.9.0
-

@@ -1,4 +1,8 @@
 **/__pycache__/
-db.sqlite3
-**/__pycache__/
 *.pyc
+db.sqlite3
+staticfiles/
+media/
+
+# Secrets — never commit this
+.env
